@@ -271,7 +271,7 @@ export default function Page() {
     anam.stopAnam();
   }, []);
 
-  if (!authed) return null;
+  if (!authed) return <div style={{ width: "100%", height: "100dvh", background: "#0b1220" }} />;
 
   const isIdle       = sessionState === "idle";
   const isConnecting = sessionState === "connecting";
@@ -431,7 +431,7 @@ export default function Page() {
         }
       `}</style>
 
-      <div className="stage" style={{ fontFamily: '-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif', color: '#eef2f8', zoom: 0.9 }}>
+      <div className="stage" style={{ fontFamily: '-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif', color: '#eef2f8' }}>
 
         {/* TOP BAR */}
         <div className="topbar">
