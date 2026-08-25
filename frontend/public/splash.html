@@ -1,0 +1,286 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kisnula AI Patient Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --cream: #f8f2f2;
+    --ink: #10132a;
+    --slate: #2e2e43;
+    --red: #e2231c;
+    --red-soft: #ff5b53;
+    --muted: #6b7280;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100%;
+    margin: 0;
+}
+
+body {
+    color: var(--slate);
+    background: var(--cream);
+    font-family: "Poppins", Arial, sans-serif;
+}
+
+.hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--cream);
+}
+
+.hero__panel {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 48%;
+    max-width: 48%;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(28px, 4.5vh, 56px) clamp(28px, 5vw, 76px);
+}
+
+.hero__waves {
+    position: absolute;
+    z-index: 0;
+    left: 0;
+    bottom: 0;
+    width: 62%;
+    height: 34%;
+    pointer-events: none;
+}
+
+.hero__logo {
+    align-self: flex-start;
+    flex: none;
+    height: clamp(34px, 4.6vw, 52px);
+    width: auto;
+    object-fit: contain;
+}
+
+.hero__body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: clamp(24px, 6vh, 64px);
+}
+
+.hero__kicker {
+    margin: 0;
+    color: var(--red);
+    font-size: clamp(12px, 1vw, 14px);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.hero__heading {
+    margin: clamp(14px, 2vh, 22px) 0 0;
+    color: var(--ink);
+    font-size: clamp(32px, 4vw, 50px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+}
+
+.hero__intro {
+    max-width: 30em;
+    margin: clamp(16px, 2.4vh, 26px) 0 0;
+    color: var(--slate);
+    font-size: clamp(15px, 1.25vw, 18px);
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.hero__start {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    width: min(100%, 430px);
+    margin-top: clamp(40px, 7vh, 72px);
+    padding: clamp(15px, 2vh, 20px) clamp(20px, 2.4vw, 28px);
+    background: linear-gradient(135deg, var(--red) 0%, #c81810 100%);
+    color: #fff;
+    font-family: inherit;
+    font-size: clamp(16px, 1.4vw, 19px);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 14px 30px rgba(226, 35, 28, 0.28);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.hero__start:hover,
+.hero__start:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px rgba(226, 35, 28, 0.34);
+}
+
+.hero__start-arrow {
+    font-size: 1.2em;
+    line-height: 1;
+}
+
+.hero__footer {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: clamp(24px, 5vh, 48px);
+}
+
+.hero__footer-bar {
+    flex: 0 0 auto;
+    width: 3px;
+    height: 18px;
+    background: var(--red);
+    border-radius: 2px;
+}
+
+.hero__footer-text {
+    margin: 0;
+    color: var(--muted);
+    font-size: clamp(13px, 1vw, 15px);
+}
+
+.hero__photo-panel {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.hero__photo-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 -1px;
+    width: 90px;
+    background: linear-gradient(90deg, var(--cream) 0%, rgba(248, 242, 242, 0) 100%);
+    z-index: 1;
+}
+
+.hero__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+}
+
+@media (max-width: 880px) {
+    body {
+        overflow-x: hidden;
+    }
+    .hero {
+        flex-direction: column;
+        min-height: auto;
+        width: 100%;
+    }
+    .hero__panel {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        order: 2;
+        padding: 28px 6vw 40px;
+    }
+    .hero__photo-panel {
+        order: 1;
+        flex: none;
+        height: 42vh;
+        min-height: 220px;
+    }
+    .hero__photo-panel::before {
+        inset: auto 0 0 0;
+        width: 100%;
+        height: 60px;
+        background: linear-gradient(180deg, rgba(248, 242, 242, 0) 0%, var(--cream) 100%);
+    }
+    .hero__body {
+        margin-top: 20px;
+        min-width: 0;
+    }
+    .hero__intro {
+        max-width: 100%;
+    }
+    .hero__start {
+        width: 100%;
+    }
+    .hero__waves {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero__start {
+        transition: none;
+    }
+}
+    </style>
+</head>
+<body>
+    <main class="hero">
+        <section class="hero__panel">
+            <svg class="hero__waves" viewBox="0 0 900 260" preserveAspectRatio="none" aria-hidden="true">
+                <g fill="none" stroke="#e2231c">
+                    <circle cx="18" cy="150" r="2.6" opacity="0.55" />
+                    <circle cx="18" cy="168" r="2.6" opacity="0.4" />
+                    <circle cx="18" cy="186" r="2.6" opacity="0.28" />
+                    <g opacity="0.16">
+                        <path d="M0 150C160 90 260 210 430 140S680 90 900 150" stroke-width="1.4" />
+                        <path d="M0 168C170 104 270 224 440 156S690 100 900 168" stroke-width="1.2" />
+                        <path d="M0 186C180 118 280 236 450 172S700 112 900 186" stroke-width="1" />
+                        <path d="M0 204C190 132 290 248 460 188S710 124 900 204" stroke-width="0.8" />
+                        <path d="M0 222C200 146 300 258 470 202S720 138 900 222" stroke-width="0.6" />
+                    </g>
+                </g>
+            </svg>
+
+            <img class="hero__logo" src="/lilly-logo.png" alt="Lilly">
+
+            <div class="hero__body">
+                <p class="hero__kicker">AI Patient Simulator</p>
+                <h1 class="hero__heading">Welcome to the<br>Kisnula Case<br>Simulation</h1>
+                <p class="hero__intro">Assess the patient. Explore the symptoms. Make your clinical decision.</p>
+
+                <a class="hero__start" id="startBtn" href="#training">
+                    <span>Start Now</span>
+                    <span class="hero__start-arrow" aria-hidden="true">→</span>
+                </a>
+            </div>
+
+            <div class="hero__footer">
+                <span class="hero__footer-bar" aria-hidden="true"></span>
+                <p class="hero__footer-text">An interactive clinical case experience</p>
+            </div>
+        </section>
+
+        <section class="hero__photo-panel" aria-hidden="true">
+            <img class="hero__photo" src="/patient-hero.jpg" alt="">
+        </section>
+    </main>
+<script>
+document.getElementById('startBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    var token = sessionStorage.getItem('jadwa_token');
+    if (!token) { window.location.href = '/login'; return; }
+    window.location.href = '/';
+});
+</script>
+</body>
+</html>
