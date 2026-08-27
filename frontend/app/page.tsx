@@ -19,22 +19,6 @@ function resampleTo(input: Int16Array, fromRate: number, toRate: number): Int16A
   return out;
 }
 
-function base64ToInt16(b64: string): Int16Array {
-  const binary = atob(b64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return new Int16Array(bytes.buffer);
-}
-
-function int16ToBase64(arr: Int16Array): string {
-  const bytes = new Uint8Array(arr.buffer);
-  let binary = "";
-  const chunkSize = 8192;
-  for (let i = 0; i < bytes.length; i += chunkSize)
-    binary += String.fromCharCode(...Array.from(bytes.subarray(i, i + chunkSize)));
-  return btoa(binary);
-}
-
 type Screen = "consultation" | "summary" | "faq";
 interface Message { role: "user" | "assistant"; text: string; }
 
@@ -203,11 +187,11 @@ export default function Page() {
     }
 
     relay.connect(
-      (b64) => anam.sendAudioChunk(int16ToBase64(resampleTo(base64ToInt16(b64), 24000, 16000))),
+      () => {},
       addTranscript,
       () => {},
-      () => anam.endAudioSequence(),
-      undefined,
+      () => anam.streamText("", true),
+      (delta) => anam.streamText(delta),
       () => {
         if (micTrackRef.current) micTrackRef.current.enabled = false;
       },

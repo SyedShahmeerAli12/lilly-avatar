@@ -79,6 +79,24 @@ export function useRealtimeRelay(): UseRealtimeRelayReturn {
           onAudioRef.current?.(msg.delta);
         }
 
+        // text-only modality events
+        if ((msg.type === "response.text.delta" || msg.type === "response.output_text.delta") && msg.delta) {
+          if (!speechStartFiredRef.current) {
+            speechStartFiredRef.current = true;
+            onSpeechStartRef.current?.();
+          }
+          assistantBufRef.current += msg.delta;
+          onTranscriptDeltaRef.current?.(msg.delta);
+        }
+
+        if (msg.type === "response.text.done" || msg.type === "response.output_text.done") {
+          if (assistantBufRef.current.trim())
+            onTranscriptRef.current?.("assistant", assistantBufRef.current.trim());
+          assistantBufRef.current = "";
+          speechStartFiredRef.current = false;
+          onSpeechEndRef.current?.();
+        }
+
         if (msg.type === "input_audio_buffer.speech_started")
           onInterruptRef.current?.();
 
