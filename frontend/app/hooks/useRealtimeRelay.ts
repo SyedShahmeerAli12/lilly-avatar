@@ -61,7 +61,8 @@ export function useRealtimeRelay(): UseRealtimeRelayReturn {
     const wsBase = base
       ? base.replace(/^http/, "ws")
       : `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}`;
-    const ws = new WebSocket(`${wsBase}/api/session/relay`);
+    const authToken = typeof window !== "undefined" ? sessionStorage.getItem("jadwa_token") : null;
+    const ws = new WebSocket(`${wsBase}/api/session/relay${authToken ? `?token=${encodeURIComponent(authToken)}` : ""}`);
 
     ws.onopen  = () => setIsConnected(true);
     ws.onclose = () => setIsConnected(false);

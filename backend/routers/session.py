@@ -1,14 +1,24 @@
-from fastapi import APIRouter, WebSocket
+from fastapi import APIRouter, WebSocket, Header, HTTPException, Depends
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 import httpx, os
 from services.openai_realtime import relay_to_openai
+from routers.auth import _verify_token
 
 router = APIRouter()
 
 
+def require_auth(authorization: str = Header(...)):
+    token = authorization.removeprefix("Bearer ").strip()
+    if not _verify_token(token):
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+
 @router.websocket("/relay")
-async def websocket_relay(ws: WebSocket):
+async def websocket_relay(ws: WebSocket, token: Optional[str] = None):
+    if not token or not _verify_token(token):
+        await ws.close(code=4401)
+        return
     await ws.accept()
     print("[relay] client connected", flush=True)
     await relay_to_openai(ws)
@@ -22,7 +32,7 @@ class Message(BaseModel):
 class SummarizeRequest(BaseModel):
     messages: List[Message]
 
-@router.post("/summarize")
+@router.post("/summarize", dependencies=[Depends(require_auth)])
 async def summarize(body: SummarizeRequest):
     if not body.messages:
         return {"summary": "No conversation to summarize."}

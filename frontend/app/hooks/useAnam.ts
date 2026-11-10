@@ -23,7 +23,11 @@ export function useAnam(): UseAnamReturn {
 
   const initAnam = useCallback(async () => {
     const base = process.env.NEXT_PUBLIC_BACKEND_URL || "";
-    const res = await fetch(`${base}/api/anam/token`, { method: "POST" });
+    const authToken = typeof window !== "undefined" ? sessionStorage.getItem("jadwa_token") : null;
+    const res = await fetch(`${base}/api/anam/token`, {
+      method: "POST",
+      headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+    });
     if (!res.ok) throw new Error("Failed to get Anam token");
     const data = await res.json();
     const sessionToken = data.sessionToken ?? data.session_token;

@@ -211,9 +211,13 @@ export default function Page() {
     setSummary("");
     try {
       const base = process.env.NEXT_PUBLIC_BACKEND_URL || "";
+      const authToken = sessionStorage.getItem("jadwa_token");
       const res = await fetch(`${base}/api/session/summarize`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+        },
         body: JSON.stringify({ messages: transcript }),
       });
       const data = await res.json();
